@@ -5,11 +5,11 @@ import java.io.IOException;
 
 public class Ethernet
 {
-    private String[] transmissionMedium;
-    private int numberOfComputers;
+    private static String[] transmissionMedium;
+    private static int numberOfComputers;
     private Computer[] computers;
 
-    public Ethernet(String arraySize, String positions)
+    public Ethernet(String arraySize, String positions, String width)
     {
         transmissionMedium = new String[Integer.valueOf(arraySize)];
         String[] coordinates = positions.split(" ");
@@ -17,16 +17,40 @@ public class Ethernet
         computers = new Computer[numberOfComputers];
 
         int index = 0;
-        for(String s: coordinates)
+
+        for(int i = 0; i < transmissionMedium.length; i++)
         {
-            transmissionMedium[Integer.valueOf(s)] = "Computer";
-            computers[index] = new Computer(index, Integer.valueOf(s));
+            transmissionMedium[i] = "Z";
         }
 
+        for(String s: coordinates)
+        {
+            transmissionMedium[Integer.valueOf(s)] = "Computer" + index;
+            computers[index] = new Computer(Integer.valueOf(s), index, Integer.valueOf(width));
+            index++;
+        }
+
+        for(int i = 0; i < transmissionMedium.length; i++)
+        {
+            System.out.print(transmissionMedium[i]);
+        }
+        System.out.println("");
+
+//        computers[0].run();
         for(Computer c : computers)
         {
-            c.run();
+            c.start();
         }
+    }
+
+    public static String[] getTransmissionMedium()
+    {
+        return transmissionMedium;
+    }
+
+    public static int getNumberOfComputers()
+    {
+        return numberOfComputers;
     }
 
     public static void main(String[] args)
@@ -46,17 +70,19 @@ public class Ethernet
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String firstLine = "";
         String secondLine = "";
+        String thirdLine = "";
 
         try
         {
             firstLine = bufferedReader.readLine();
             secondLine = bufferedReader.readLine();
+            thirdLine = bufferedReader.readLine();
         }
         catch(IOException e)
         {
             System.out.println("Error during reading from file");
         }
 
-        Ethernet ethernet = new Ethernet(firstLine, secondLine);
+        Ethernet ethernet = new Ethernet(firstLine, secondLine, thirdLine);
     }
 }
