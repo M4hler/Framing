@@ -33,7 +33,7 @@ public class Framing
             {
                 bufferSubstring += buffer.substring(subStringIndex, buffer.length());
             }
-
+            crcCode.reset();
             crcCode.update(bufferSubstring.getBytes());
 
             bufferSubstring += " " + Long.toBinaryString(crcCode.getValue());
@@ -53,15 +53,16 @@ public class Framing
 
         for(int i = 1; i < content.length; i += 4)
         {
+            content[i] = content[i].replaceAll("111110", "11111");
+            content[i + 1] = content[i + 1].replaceAll("111110", "11111");
             String control_code = content[i + 1];
 
-            if(content[i + 1].equals(control_code))
-            {
-                outputStream += content[i];
-            }
-        }
+            crcCode.reset();
+            crcCode.update(content[i].getBytes());
 
-        outputStream = outputStream.replaceAll("111110", "11111");
+            if(Long.toBinaryString(crcCode.getValue()).equals(control_code))
+                outputStream += content[i];
+        }
 
         return outputStream;
     }
