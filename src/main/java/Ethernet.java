@@ -7,9 +7,9 @@ public class Ethernet
 {
     private static String[] transmissionMedium;
     private static int numberOfComputers;
-    private Computer[] computers;
+    private static Computer[] computers;
 
-    public Ethernet(String arraySize, String positions, String width)
+    public Ethernet(String arraySize, String positions)
     {
         transmissionMedium = new String[Integer.valueOf(arraySize)];
         String[] coordinates = positions.split(" ");
@@ -26,7 +26,7 @@ public class Ethernet
         for(String s: coordinates)
         {
             transmissionMedium[Integer.valueOf(s)] = "Computer" + index;
-            computers[index] = new Computer(Integer.valueOf(s), index, Integer.valueOf(width));
+            computers[index] = new Computer(Integer.valueOf(s), index);
             index++;
         }
 
@@ -36,7 +36,7 @@ public class Ethernet
         }
         System.out.println("");
 
-//        computers[0].run();
+//        computers[1].start();
         for(Computer c : computers)
         {
             c.start();
@@ -51,6 +51,11 @@ public class Ethernet
     public static int getNumberOfComputers()
     {
         return numberOfComputers;
+    }
+
+    public static Computer getComputer(int a)
+    {
+        return computers[a];
     }
 
     public static void main(String[] args)
@@ -70,19 +75,17 @@ public class Ethernet
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String firstLine = "";
         String secondLine = "";
-        String thirdLine = "";
 
         try
         {
             firstLine = bufferedReader.readLine();
             secondLine = bufferedReader.readLine();
-            thirdLine = bufferedReader.readLine();
         }
         catch(IOException e)
         {
             System.out.println("Error during reading from file");
         }
 
-        Ethernet ethernet = new Ethernet(firstLine, secondLine, thirdLine);
+        Ethernet ethernet = new Ethernet(firstLine, secondLine);
     }
 }
